@@ -12,13 +12,10 @@ ${AutoBaseline}
 ├── run.py
 └── utils.py
 ```
-
 - config: 모델 관리를 위한 파라미터를 설정하는 yaml 파일 경로
 - data: 데이터 경로
 - output: 실행 결과가 저장되는 경로
 - run.py: 실행 코드
-
----
 
 ### Run
 
