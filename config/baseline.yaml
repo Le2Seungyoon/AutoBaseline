@@ -1,0 +1,44 @@
+data:
+  name: 'data.csv'
+  data_path: './data/'
+  output_path: './output/'
+
+# 사용하지 않을 모델, 평가지표, 컬럼은 주석처리
+models:
+  - 'lr'
+  - 'ridge'
+  - 'dt'
+  - 'rf'
+  - 'et'
+  - 'xgb'
+  - 'lgbm'
+  - 'cat'
+
+metrics:
+  - 'MAE'
+  - 'RMSE'
+  - 'NMAE'
+  - 'R2'
+
+seed: 41
+
+target: 'TARGET'
+
+select:
+#  - 'sessionID'
+#  - 'userID'
+  - 'TARGET'
+  - 'browser'
+  - 'OS'
+  - 'device'
+  - 'new'
+  - 'quality'
+  - 'duration'
+  - 'bounced'
+  - 'transaction'
+  - 'transaction_revenue'       
+  - 'continent'
+  - 'subcontinent'
+  - 'country'
+  - 'traffic_source'       
+  - 'traffic_medium'
