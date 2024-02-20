@@ -4,6 +4,7 @@ import random
 import os
 import re
 import yaml
+import argparse
 from sklearn.linear_model import LinearRegression, Ridge
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.ensemble import RandomForestRegressor, ExtraTreesRegressor
@@ -15,16 +16,20 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 from utils import MAE, RMSE, NMAE, R2, seed_everything
 
-# 새로운 config를 사용하실 경우 setting_name을 변경
-setting_name = 'baseline' 
-setting_extension = '.yaml'
-setting = setting_name + setting_extension
-route = './config/' + setting
+parser = argparse.ArgumentParser()
+parser.add_argument('--config', type=str, help='YAML 파일 지정', required=True)
 
-with open(route, 'r') as file:
+args = parser.parse_args()
+config_filename = args.config
+
+# YAML 파일은 config 폴더 내부에 저장
+config_directory = './config/'
+config_path = config_directory + config_filename
+
+with open(config_path, 'r') as file:
     config = yaml.safe_load(file)
-    
-SETTING = setting_name
+
+SETTING = config_filename.replace('.yaml', '')
 DATA_NAME = config['data']['name']
 DATA_PATH = config['data']['data_path']
 OUTPUT_PATH = config['data']['output_path']
