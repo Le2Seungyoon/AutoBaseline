@@ -37,7 +37,7 @@ MODELS = config['models']
 METRICS = config['metrics']
 SEED = config['seed']
 TARGET = config['target']
-SELECT = config['select']
+FEATURE = config['feature']
 
 # seed setting
 seed_everything(SEED)
@@ -54,7 +54,7 @@ cat = CatBoostRegressor(verbose=False, allow_writing_files=False, random_state=S
 
 # data setting
 data = pd.read_csv(DATA_PATH + DATA_NAME)
-data = data[SELECT]
+data = data[FEATURE + [TARGET]]
 
 ## to prevent error1
 categorical_features = list(data.dtypes[data.dtypes == "object"].index)
@@ -78,23 +78,26 @@ for df in dfs:
         new_names = {col: f'{new_col}_{i}' if new_col in new_n_list[:i] else new_col for i, (col, new_col) in enumerate(new_names.items())}
         df.rename(columns=new_names, inplace=True)
 
-if __name__ == '__main__':
+if __name__ == '__main__':    
     model_instances = [lr, ridge, dt, rf, et, xgb, lgbm, cat]
-    metric_funcs = [MAE, RMSE, NMAE, R2]
+    metric_funcs = {'MAE': MAE, 'RMSE': RMSE, 'NMAE': NMAE, 'R2': R2}
+
     results = {'Metric': METRICS}
 
     for model, name in tqdm(list(zip(model_instances, MODELS)), desc="Training Models"):
         model.fit(train_x, train_y)
         pred = model.predict(test_x)
-        
+
         model_metrics = []
-        for metric_func in metric_funcs:
+        for metric_name in METRICS:
+            metric_func = metric_funcs[metric_name]
             metric_value = metric_func(test_y, pred)
             model_metrics.append(metric_value)
 
         results[name] = model_metrics
-        
+
     results_df = pd.DataFrame(results)
+    
     t = pd.Timestamp.now()
     fname = f"{SETTING}_result_{t.month:02}{t.day:02}{t.hour:02}{t.minute:02}.csv"
     results_df.to_csv(OUTPUT_PATH + fname, index=False)

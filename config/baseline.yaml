@@ -24,10 +24,9 @@ seed: 41
 
 target: 'TARGET'
 
-select:
+feature:
 #  - 'sessionID'
 #  - 'userID'
-  - 'TARGET'
   - 'browser'
   - 'OS'
   - 'device'
