@@ -50,7 +50,7 @@ def fill_missing_values(train_x, test_x, method='mean'):
     return train_x, test_x
 
 # scaling
-def scale_features(train_x, test_x, scaling_target, method='standard'):
+def scale_features(train_x, test_x, scaling_target, method='robust'):
     """
     Scales specified features in train_x and test_x dataframes using the specified scaler type.
 
@@ -63,24 +63,42 @@ def scale_features(train_x, test_x, scaling_target, method='standard'):
     Returns:
     스케일링이 적용된 train_x와 test_x가 반환되게 됩니다. 
     """
-    if method == 'robust':
-        scaler = RobustScaler()
-    elif method == 'minmax':
-        scaler = MinMaxScaler()
-    elif method == 'standard':
-        scaler = StandardScaler()
+    if method in ['robust', 'minmax', 'standard']:
+        if method == 'robust':
+            scaler = RobustScaler()
+        elif method == 'minmax':
+            scaler = MinMaxScaler()
+        elif method == 'standard':
+            scaler = StandardScaler()
+        
+        for i in scaling_target:
+            train_data = train_x[i].values.reshape(-1, 1)
+            test_data = test_x[i].values.reshape(-1, 1)
+            scaler.fit(train_data)
+            train_x[i] = scaler.transform(train_data)
+            test_x[i] = scaler.transform(test_data)
+    
+    elif method == 'iqr':
+        for i in scaling_target:
+            Q1_train = train_x[i].quantile(0.25)
+            Q3_train = train_x[i].quantile(0.75)
+            
+            IQR_train = Q3_train - Q1_train
+            
+            lower_bound_train = Q1_train - 1.5 * IQR_train
+            upper_bound_train = Q3_train + 1.5 * IQR_train
+            
+            train_x[i] = np.where(train_x[i] < lower_bound_train, lower_bound_train, train_x[i])
+            train_x[i] = np.where(train_x[i] > upper_bound_train, upper_bound_train, train_x[i])
+            
+            test_x[i] = np.where(test_x[i] < lower_bound_train, lower_bound_train, test_x[i])
+            test_x[i] = np.where(test_x[i] > upper_bound_train, upper_bound_train, test_x[i])
     elif method == 'none':
-        # skip
+        # Skip
         return train_x, test_x
     else:
-        raise ValueError("Scaler type must be 'standard', 'minmax', 'robust', or 'none'.")
-
-    for i in scaling_target:
-        train_data = train_x[i].values.reshape(-1, 1)
-        test_data = test_x[i].values.reshape(-1, 1)
-        scaler.fit(train_data)
-        train_x[i] = scaler.transform(train_data)
-        test_x[i] = scaler.transform(test_data)
+        raise ValueError("Scaler type must be 'robust', 'minmax', 'standard', 'none', or 'iqr'.")
+    
     return train_x, test_x
 
 # to prevent error
