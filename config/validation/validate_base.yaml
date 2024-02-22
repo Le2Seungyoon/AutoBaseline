@@ -46,7 +46,7 @@ feature:
 fill_method:
   method: 'median'
 
-# standard, minmax, robust 중 1개 선택
+# standard, minmax, robust, iqr, none 중 1개 선택
 scale:
   scale_target: 
     - 'transaction_revenue'
