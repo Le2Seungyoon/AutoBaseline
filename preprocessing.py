@@ -63,14 +63,17 @@ def scale_features(train_x, test_x, scaling_target, method='standard'):
     Returns:
     스케일링이 적용된 train_x와 test_x가 반환되게 됩니다. 
     """
-    if method == 'standard':
-        scaler = StandardScaler()
+    if method == 'robust':
+        scaler = RobustScaler()
     elif method == 'minmax':
         scaler = MinMaxScaler()
-    elif method == 'robust':
-        scaler = RobustScaler()
+    elif method == 'standard':
+        scaler = StandardScaler()
+    elif method == 'none':
+        # skip
+        return train_x, test_x
     else:
-        raise ValueError("Scaler type must be 'standard', 'minmax', or 'robust'.")
+        raise ValueError("Scaler type must be 'standard', 'minmax', 'robust', or 'none'.")
 
     for i in scaling_target:
         train_data = train_x[i].values.reshape(-1, 1)
