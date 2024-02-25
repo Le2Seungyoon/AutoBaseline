@@ -1,18 +1,24 @@
 data:
   train_data: 'train.csv'
+  test_data: 'test.csv'
   data_path: './data/'
   output_path: './output/'
 
 # 사용하지 않을 모델, 평가지표, 컬럼은 주석처리
 models:
-  - 'lr'
-  - 'ridge'
-  - 'dt'
-  - 'rf'
-  - 'et'
-  - 'xgb'
-  - 'lgbm'
-  - 'cat'
+  # baseline or tuning mode 존재
+  mode: 'tuning'
+  active_model:
+    - 'lr'
+    - 'ridge'
+    - 'dt'
+    - 'rf'
+    - 'et'
+    - 'xgb'
+    - 'lgbm'
+    - 'cat'
+  trial : 2 # tuning 모드일 경우 반복 횟수
+  save_path: './models/'
 
 metrics:
   - 'MAE'
