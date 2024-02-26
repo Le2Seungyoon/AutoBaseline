@@ -1,7 +1,7 @@
 ### Code Structure
 
 ```
-${AutoBaseline}
+${AutoML}
 ├── config/
 │   └── sample.yaml
 ├── data/
@@ -18,12 +18,13 @@ ${AutoBaseline}
 └── utils.py
 ```
 - config: 모델 관리를 위한 파라미터를 설정하는 YAML 파일 경로
-    - prediction: train, test 데이터를 활용한 실제 추론을 위한 실험 관리 저장소
-    - validation: train 데이터를 모델 검증을 위한 실험 관리 저장소
 - data: 데이터 경로
+- models: 모델 저장 및 모델 파라미터 설정 경로
+      - param_config.py: 튜닝을 위한 하이퍼 파라미터 범위가 지정된 파일
 - output: 실행 결과가 저장되는 경로
-- predict.py: 실제 추론 코드
-- validate.py: 모델 검증 코드
+- preprocessing.py: 데이터 전처리 코드
+- run.py: 실제 실행 코드
+- utils.py: run.py를 실행하기 위한 다양한 기능들이 포함된 코드
 
 ### run
 
